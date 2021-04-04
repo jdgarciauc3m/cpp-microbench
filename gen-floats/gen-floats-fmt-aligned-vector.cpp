@@ -13,5 +13,5 @@ int main() {
   print_bench(r);
 
   // Avoid allocation of p to be optimized out
-  std::cerr << p[0];
+  std::cout << p[0] << "\n";
 }
