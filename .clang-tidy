@@ -1,0 +1,2 @@
+Checks: '-*,abseil-*,boost-*,bugprone-*,cert-*,clang-analyzer-*,concurrency-*,cppcoreguidelines-*,google-readability-casting,hicpp-*,-hicpp-exception-baseclass,misc-*,modernize-*,-modernize-use-trailing-return-type,openmp-*,performance-*readability-*'
+#Checks: ''
