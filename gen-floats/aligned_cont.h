@@ -134,8 +134,8 @@ auto generate_trivial_array(std::size_t max) {
     v[i] = 1.0F / gsl::narrow_cast<float>(i);
   }
   auto t3 = high_resolution_clock::now();
-  fmt::print("Create: {}\n", t2-t1);
-  fmt::print("Fill: {}\n", t3-t2);
+  fmt::print("Create: {}\n", duration_cast<microseconds>(t2-t1));
+  fmt::print("Fill: {}\n", duration_cast<microseconds>(t3-t2));
   return v;
 }
 
@@ -149,8 +149,8 @@ auto generate_array(std::size_t max) {
     v[i] = 1.0F / gsl::narrow_cast<float>(i);
   }
   auto t3 = high_resolution_clock::now();
-  fmt::print("Create: {}\n", t2-t1);
-  fmt::print("Fill: {}\n", t3-t2);
+  fmt::print("Create: {}\n", duration_cast<microseconds>(t2-t1));
+  fmt::print("Fill: {}\n", duration_cast<microseconds>(t3-t2));
   return v;
 }
 
@@ -165,8 +165,8 @@ auto generate_vector(std::size_t max) {
     v.push_back(1.0F / gsl::narrow_cast<float>(i));
   }
   auto t3 = high_resolution_clock::now();
-  fmt::print("Create: {}\n", t2-t1);
-  fmt::print("Fill: {}\n", t3-t2);
+  fmt::print("Create: {}\n", duration_cast<microseconds>(t2-t1));
+  fmt::print("Fill: {}\n", duration_cast<microseconds>(t3-t2));
   return v;
 }
 
