@@ -10,3 +10,4 @@ find_package(Microsoft.GSL)
 add_compile_options(-Wall -Wextra -Werror -pedantic -pedantic-errors)
 
 add_subdirectory(gen-floats)
+add_subdirectory(read-floats)
