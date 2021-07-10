@@ -24,7 +24,7 @@ struct bench_result bench_cstdio(size_t n) {
   clock_t alloc_time = clock();
 
   for (size_t i = 0; i < n; ++i) {
-    v[i] = 1.0F / (float) i;
+    v[i] = 1.0F / (float) (i+1);
   }
 
   timing.t2 = clock();

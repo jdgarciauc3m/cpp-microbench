@@ -131,7 +131,7 @@ auto generate_trivial_array(std::size_t max) {
   trivial_dynamic_array<T> v(max);
   auto t2 = high_resolution_clock::now();
   for (std::size_t i = 0; i < max; ++i) {
-    v[i] = 1.0F / gsl::narrow_cast<float>(i);
+    v[i] = 1.0F / gsl::narrow_cast<float>(i+1);
   }
   auto t3 = high_resolution_clock::now();
   fmt::print("Create: {}\n", duration_cast<microseconds>(t2-t1));
@@ -146,7 +146,7 @@ auto generate_array(std::size_t max) {
   dynamic_array<T> v(max);
   auto t2 = high_resolution_clock::now();
   for (std::size_t i = 0; i < max; ++i) {
-    v[i] = 1.0F / gsl::narrow_cast<float>(i);
+    v[i] = 1.0F / gsl::narrow_cast<float>(i+1);
   }
   auto t3 = high_resolution_clock::now();
   fmt::print("Create: {}\n", duration_cast<microseconds>(t2-t1));
@@ -162,7 +162,7 @@ auto generate_vector(std::size_t max) {
   v.reserve(max);
   auto t2 = high_resolution_clock::now();
   for (std::size_t i = 0; i < max; ++i) {
-    v.push_back(1.0F / gsl::narrow_cast<float>(i));
+    v.push_back(1.0F / gsl::narrow_cast<float>(i+1));
   }
   auto t3 = high_resolution_clock::now();
   fmt::print("Create: {}\n", duration_cast<microseconds>(t2-t1));
