@@ -18,6 +18,7 @@ auto stream_input_array() {
   using namespace std::string_literals;
   auto file_name = "bench_stdio.txt"s;
   std::ifstream file{file_name};
+  file.sync_with_stdio(false);
   if (!file) {
     fmt::print(std::cerr, "Cannot open file {}\n", file_name);
     std::exit(-1); // NOLINT
@@ -49,6 +50,7 @@ auto stream_input_vector() {
   using namespace std::string_literals;
   auto file_name = "bench_stdio.txt"s;
   std::ifstream file{file_name};
+  file.sync_with_stdio(false);
   if (!file) {
     fmt::print(std::cerr, "Cannot open file {}\n", file_name);
     std::exit(-1); // NOLINT
