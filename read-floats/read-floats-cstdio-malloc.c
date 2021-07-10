@@ -22,6 +22,7 @@ struct bench_result bench_cstdio(size_t n) {
   float * v = (float *) (((unsigned long long) buffer + pad) & ~(line_size - 1));
 
   clock_t alloc_time = clock();
+  timing.t2 = alloc_time;
 
   double d1 = 1000000.0 * (alloc_time - timing.t1) / CLOCKS_PER_SEC;// NOLINT
   printf("Create %lf us\n", d1);
@@ -29,11 +30,19 @@ struct bench_result bench_cstdio(size_t n) {
   FILE * file = fopen("bench_stdio.txt", "r");
   if (file == NULL) {
     fprintf(stderr, "Cannot open file %s for input\n", "bench_stdio.txt");
-    exit(-1);// NOLINT
+    exit(-1); // NOLINT
   }
-  fscanf(file, "%lu", &n);// NOLINT
+  int res = fscanf(file, "%lu", &n); // NOLINT
+  if (res != 1) {
+    fprintf(stderr, "Cannot read count from file %s\n", "bench_stdio.txt");
+    exit(-1); // NOLINT
+  }
   for (size_t i = 0; i < n; ++i) {
-    fscanf(file, "%f", &v[i]);// NOLINT
+    res = fscanf(file, "%f", &v[i]);// NOLINT
+    if (res != 1) {
+      fprintf(stderr, "Cannot read data index %lu from file %s\n", n, "bench_stdio.txt");
+      exit(-1); // NOLINT
+    }
   }
   fclose(file);
   free(buffer);
@@ -47,7 +56,7 @@ void print_bench(const struct bench_result * t) {
   double d2 = 1000000.0 * (t->t3 - t->t2) / CLOCKS_PER_SEC;// NOLINT
   printf("\nVersion: bench_cstdio\n");
   printf("Generation %lf us\n", d1);
-  printf("Writing %lf us\n", d2);
+  printf("Reading %lf us\n", d2);
 }
 
 int main() {
