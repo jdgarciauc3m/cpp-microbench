@@ -39,9 +39,9 @@ struct bench_result bench_cstdio(size_t n) {
     fprintf(stderr, "Cannot open file %s for output\n", "bench_stdio.txt");
     exit(-1);// NOLINT
   }
-  fprintf(file, "%lu", n);// NOLINT
+  fprintf(file, "%lu\n", n);// NOLINT
   for (size_t i = 0; i < n; ++i) {
-    fprintf(file, "%.18f", v[i]);// NOLINT
+    fprintf(file, "%.18f\n", v[i]);// NOLINT
   }
   fclose(file);
   free(buffer);
