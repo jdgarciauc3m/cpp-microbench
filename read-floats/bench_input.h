@@ -10,6 +10,7 @@
 #include <fmt/ostream.h>
 
 #include "trivial_array.h"
+#include "dynamic_vector.h"
 
 static constexpr std::size_t max_elements = 100'000;
 
@@ -44,6 +45,37 @@ auto stream_input_array() {
   return v;
 }
 
+auto stream_input_vector() {
+  using namespace std::string_literals;
+  auto file_name = "bench_stdio.txt"s;
+  std::ifstream file{file_name};
+  if (!file) {
+    fmt::print(std::cerr, "Cannot open file {}\n", file_name);
+    std::exit(-1); // NOLINT
+  }
+
+  std::size_t n = 0;
+  file >> n;
+  if (!file) {
+    fmt::print(std::cerr, "Cannot read count from file {}\n", file_name);
+    std::exit(-1); // NOLINT
+  }
+
+  dynamic_vector<float> v(n);
+
+  for (std::size_t i = 0; i<n; ++i) {
+    file >> v[i];
+    if (!file) {
+      fmt::print(std::cerr, "Cannot read data item [{}] from file {}\n", i, file_name);
+      exit(-1); // NOLINT
+    }
+  }
+
+  std::cout << v[n-1] << '\n';
+
+  return v;
+}
+
 auto bench_stream_input_array() {
   using namespace std::chrono;
 
@@ -55,19 +87,16 @@ auto bench_stream_input_array() {
   return std::tuple {__func__, t2 - t1, t3 - t2};
 }
 
-/*
-auto bench_fmt_output_vector(int n) {
+auto bench_stream_input_vector() {
   using namespace std::chrono;
 
   auto t1 = high_resolution_clock::now();
-  auto v = generate_vector<float>(n);
   auto t2 = high_resolution_clock::now();
-  auto v = stream_intput_array();
+  auto v = stream_input_vector();
   auto t3 = high_resolution_clock::now();
 
   return std::tuple {__func__, t2 - t1, t3 - t2};
 }
-*/
 
 void print_bench(auto t) {
   using namespace std::chrono;
