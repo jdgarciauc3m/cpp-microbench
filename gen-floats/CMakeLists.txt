@@ -15,3 +15,6 @@ target_link_libraries(gen-floats-fmt-aligned-array fmt::fmt)
 
 add_executable(gen-floats-fmt-aligned-alloc-array gen-floats-fmt-aligned-alloc-array.cpp)
 target_link_libraries(gen-floats-fmt-aligned-alloc-array fmt::fmt)
+
+add_executable(gen-floats-fmt-array gen-floats-fmt-array.cpp)
+target_link_libraries(gen-floats-fmt-array fmt::fmt)

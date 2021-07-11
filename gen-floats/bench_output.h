@@ -13,6 +13,7 @@
 #include "util/aligned_vector.hpp"
 #include "util/alloc_array.hpp"
 #include "util/trivial_aligned_array.hpp"
+#include "util/plain_array.hpp"
 
 template <typename array_type>
 auto generate_array(std::size_t max) {
