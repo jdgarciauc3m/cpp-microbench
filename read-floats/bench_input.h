@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <chrono>
+#include <tuple>
 
 #include <fmt/os.h>
 #include <fmt/ostream.h>
@@ -16,8 +17,7 @@
 
 static constexpr std::size_t max_elements = 100'000;
 
-template <typename container>
-auto stream_input() {
+auto open_file() {
   using namespace std::string_literals;
   auto file_name = "bench_stdio.txt"s;
   std::ifstream file{file_name};
@@ -26,54 +26,56 @@ auto stream_input() {
     fmt::print(std::cerr, "Cannot open file {}\n", file_name);
     std::exit(-1); // NOLINT
   }
+  return file;
+}
 
+template<typename container_type>
+auto make_container(std::istream & file) {
   std::size_t n = 0;
   file >> n;
   if (!file) {
-    fmt::print(std::cerr, "Cannot read count from file {}\n", file_name);
+    fmt::print(std::cerr, "Cannot read count from file\n");
     std::exit(-1); // NOLINT
   }
 
-  container v(n);
-
-  for (std::size_t i = 0; i<n; ++i) {
-    file >> v[i];
-    if (!file) {
-      fmt::print(std::cerr, "Cannot read data item [{}] from file {}\n", i, file_name);
-      exit(-1); // NOLINT
-    }
-  }
-
-  std::cout << v[n-1] << '\n';
+  container_type v(n);
 
   return v;
 }
 
-auto bench_stream_input_array() {
-  using namespace std::chrono;
+void stream_input(std::istream & is, auto & v) {
+  for (std::size_t i = 0; i<v.size(); ++i) {
+    is >> v[i];
+    if (!is) {
+      fmt::print(std::cerr, "Cannot read data item [{}] from file\n", i);
+      exit(-1); // NOLINT
+    }
+  }
 
-  auto t1 = high_resolution_clock::now();
-  auto v = stream_input<trivial_aligned_array<float>>();
-  auto t2 = high_resolution_clock::now();
-
-  return std::tuple {__func__, t2 - t1};
+  std::cout << v[v.size()-1] << '\n';
 }
 
-auto bench_stream_input_vector() {
+template <typename container_type>
+auto bench_stream() {
   using namespace std::chrono;
 
   auto t1 = high_resolution_clock::now();
-  auto v = stream_input<aligned_vector<float>>();
+  auto file = open_file();
+  auto v = make_container<container_type>(file);
   auto t2 = high_resolution_clock::now();
+  stream_input(file,v);
+  auto t3 = high_resolution_clock::now();
 
-  return std::tuple {__func__, t2 - t1};
+  return std::tuple {__func__, t2 - t1, t3 - t2};
 }
 
 void print_bench(auto t) {
   using namespace std::chrono;
   auto d1 = duration_cast<microseconds>(std::get<1>(t));
+  auto d2 = duration_cast<microseconds>(std::get<2>(t));
   fmt::print("\nVersion: {}\n", std::get<0>(t));
-  fmt::print("Reading {} us\n", d1.count());
+  fmt::print("Allocation {} us\n", d1.count());
+  fmt::print("Reading {} us\n", d2.count());
 }
 
 #endif//CPP_MICROBENCH_BENCH_INTPUT_H
