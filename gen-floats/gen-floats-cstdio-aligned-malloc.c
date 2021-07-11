@@ -80,7 +80,7 @@ int main(int argc, char ** argv) {
 
   // Avoid allocation of p to be optimized out
   printf("%c", p[0]);
-  
+
   free(p);
 
   return 0;
