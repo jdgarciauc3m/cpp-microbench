@@ -51,7 +51,7 @@ auto bench_stream_input_array() {
   using namespace std::chrono;
 
   auto t1 = high_resolution_clock::now();
-  auto v = stream_input<trivial_dynamic_array<float>>();
+  auto v = stream_input<trivial_aligned_array<float>>();
   auto t2 = high_resolution_clock::now();
 
   return std::tuple {__func__, t2 - t1};

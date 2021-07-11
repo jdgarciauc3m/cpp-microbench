@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-
 int main(int argc, char ** argv) {
   if (argc!=2) {
     std::cerr << "Wrong arguments.\n";
@@ -16,7 +15,7 @@ int main(int argc, char ** argv) {
 
   std::size_t max_elements = std::stoull(argv[1]); // NOLINT
 
-  auto r = bench_fmt_output_vector(max_elements);
+  auto r = bench_fmt_output_alloc_array(max_elements);
   print_bench(r);
 
   // Avoid allocation of p to be optimized out

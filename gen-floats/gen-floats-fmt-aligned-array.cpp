@@ -1,4 +1,3 @@
-#include "aligned_cont.h"
 #include "bench_output.h"
 
 #include <iostream>
