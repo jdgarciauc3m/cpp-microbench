@@ -1,3 +1,5 @@
+include_directories(..)
+
 add_executable(read-floats-cstdio-malloc read-floats-cstdio-malloc.c)
 
 add_executable(read-floats-stream-aligned-array read-floats-stream-aligned-array.cpp)

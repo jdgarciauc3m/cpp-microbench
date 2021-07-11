@@ -9,8 +9,10 @@
 #include <fmt/os.h>
 #include <fmt/ostream.h>
 
-#include "trivial_array.h"
-#include "dynamic_vector.h"
+#include "util/aligned_vector.hpp"
+#include "util/alloc_array.hpp"
+#include "util/trivial_aligned_array.hpp"
+#include "util/plain_array.hpp"
 
 static constexpr std::size_t max_elements = 100'000;
 
@@ -61,7 +63,7 @@ auto bench_stream_input_vector() {
   using namespace std::chrono;
 
   auto t1 = high_resolution_clock::now();
-  auto v = stream_input<dynamic_vector<float>>();
+  auto v = stream_input<aligned_vector<float>>();
   auto t2 = high_resolution_clock::now();
 
   return std::tuple {__func__, t2 - t1};
