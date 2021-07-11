@@ -43,6 +43,30 @@ auto make_container(std::istream & file) {
   return v;
 }
 
+template <typename T>
+struct is_vector_t : std::false_type {};
+
+template <typename T, typename A>
+struct is_vector_t<std::vector<T,A>> : std::true_type {};
+
+template <typename T>
+concept vector_like = is_vector_t<T>::value;
+
+template <vector_like vector_type>
+auto make_container(std::istream & is) {
+  std::size_t n = 0;
+  is >> n;
+  if (!is) {
+    fmt::print(std::cerr, "Cannot read count from file\n");
+    std::exit(-1); // NOLINT
+  }
+
+  vector_type v;
+  v.reserve(n);
+
+  return v;
+}
+
 void stream_input(std::istream & is, auto & v) {
   for (std::size_t i = 0; i<v.size(); ++i) {
     is >> v[i];
@@ -50,6 +74,20 @@ void stream_input(std::istream & is, auto & v) {
       fmt::print(std::cerr, "Cannot read data item [{}] from file\n", i);
       exit(-1); // NOLINT
     }
+  }
+
+  std::cout << v[v.size()-1] << '\n';
+}
+
+template <vector_like vector_type>
+void stream_input(std::istream & is, vector_type & v) {
+  typename vector_type::value_type x;
+  while (is >> x) {
+    v.push_back(x);
+  }
+  if (!is.eof()) {
+    fmt::print(std::cerr, "Cannot read data item [{}] from file\n", v.size());
+    exit(-1); // NOLINT
   }
 
   std::cout << v[v.size()-1] << '\n';
