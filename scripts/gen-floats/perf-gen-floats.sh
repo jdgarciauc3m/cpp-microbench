@@ -39,5 +39,6 @@ run() {
 }
 
 run gen-floats-cstdio-malloc
+run gen-floats-cstdio-aligned-malloc
 run gen-floats-fmt-aligned-array
 run gen-floats-fmt-aligned-vector
