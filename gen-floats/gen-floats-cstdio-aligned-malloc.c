@@ -78,6 +78,9 @@ int main(int argc, char ** argv) {
   struct bench_result t = bench_cstdio(max_value);
   print_bench(&t);
 
+  // Avoid allocation of p to be optimized out
+  printf("%c", p[0]);
+  
   free(p);
 
   return 0;
