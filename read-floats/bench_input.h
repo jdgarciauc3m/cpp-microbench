@@ -17,7 +17,7 @@
 
 static constexpr std::size_t max_elements = 100'000;
 
-auto open_file() {
+inline auto open_file() {
   using namespace std::string_literals;
   auto file_name = "bench_stdio.txt"s;
   std::ifstream file{file_name};
@@ -29,17 +29,19 @@ auto open_file() {
   return file;
 }
 
-template<typename container_type>
-auto make_container(std::istream & file) {
+inline std::size_t read_size(std::istream & is) {
   std::size_t n = 0;
-  file >> n;
-  if (!file) {
+  is >> n;
+  if (!is) {
     fmt::print(std::cerr, "Cannot read count from file\n");
     std::exit(-1); // NOLINT
   }
+  return n;
+}
 
+template<typename container_type>
+auto make_container(std::size_t n) {
   container_type v(n);
-
   return v;
 }
 
@@ -53,17 +55,9 @@ template <typename T>
 concept vector_like = is_vector_t<T>::value;
 
 template <vector_like vector_type>
-auto make_container(std::istream & is) {
-  std::size_t n = 0;
-  is >> n;
-  if (!is) {
-    fmt::print(std::cerr, "Cannot read count from file\n");
-    std::exit(-1); // NOLINT
-  }
-
+auto make_container(std::size_t n) {
   vector_type v;
   v.reserve(n);
-
   return v;
 }
 
@@ -99,21 +93,25 @@ auto bench_stream() {
 
   auto t1 = high_resolution_clock::now();
   auto file = open_file();
-  auto v = make_container<container_type>(file);
+  std::size_t n = read_size(file);
   auto t2 = high_resolution_clock::now();
-  stream_input(file,v);
+  auto v = make_container<container_type>(n);
   auto t3 = high_resolution_clock::now();
+  stream_input(file,v);
+  auto t4 = high_resolution_clock::now();
 
-  return std::tuple {__func__, t2 - t1, t3 - t2};
+  return std::tuple {__func__, t2 - t1, t3 - t2, t4 - t3};
 }
 
 void print_bench(auto t) {
   using namespace std::chrono;
   auto d1 = duration_cast<microseconds>(std::get<1>(t));
   auto d2 = duration_cast<microseconds>(std::get<2>(t));
+  auto d3 = duration_cast<microseconds>(std::get<3>(t));
   fmt::print("\nVersion: {}\n", std::get<0>(t));
-  fmt::print("Allocation {} us\n", d1.count());
-  fmt::print("Reading {} us\n", d2.count());
+  fmt::print("Initial {} us\n", d1.count());
+  fmt::print("Allocation {} us\n", d2.count());
+  fmt::print("Reading {} us\n", d3.count());
 }
 
 #endif//CPP_MICROBENCH_BENCH_INTPUT_H

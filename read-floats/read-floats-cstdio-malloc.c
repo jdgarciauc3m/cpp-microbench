@@ -3,7 +3,7 @@
 #include <time.h>
 
 struct bench_result {
-  clock_t t1, t2, t3;
+  clock_t t1, t2, t3, t4;
 };
 
 struct bench_result bench_cstdio() {
@@ -23,13 +23,15 @@ struct bench_result bench_cstdio() {
     exit(-1); // NOLINT
   }
 
+  timing.t2 = clock();
+
   float * v = malloc(n * sizeof(float));
   if (v == NULL) {
     fprintf(stderr, "Cannot allocate memory [size=%lu]\n", n);
     exit(-1);// NOLINT
   }
 
-  timing.t2 = clock();
+  timing.t3 = clock();
 
   double d1 = 1000000.0 * (timing.t2 - timing.t1) / CLOCKS_PER_SEC;// NOLINT
   printf("Create %lf us\n", d1);
@@ -44,16 +46,18 @@ struct bench_result bench_cstdio() {
   fclose(file);
   free(v);
 
-  timing.t3 = clock();
+  timing.t4 = clock();
   return timing;
 }
 
 void print_bench(const struct bench_result * t) {
   double d1 = 1000000.0 * (t->t2 - t->t1) / CLOCKS_PER_SEC;// NOLINT
   double d2 = 1000000.0 * (t->t3 - t->t2) / CLOCKS_PER_SEC;// NOLINT
+  double d3 = 1000000.0 * (t->t4 - t->t3) / CLOCKS_PER_SEC;// NOLINT
   printf("\nVersion: bench_cstdio\n");
-  printf("Allocation %lf us\n", d1);
-  printf("Reading %lf us\n", d2);
+  printf("Initial %lf us\n", d1);
+  printf("Allocation %lf us\n", d2);
+  printf("Reading %lf us\n", d3);
 }
 
 int main() {

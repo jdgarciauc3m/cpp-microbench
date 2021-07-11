@@ -28,6 +28,9 @@ run() {
     read-floats/$1
   done >tmp.dat
 
+  grep Initial tmp.dat > init.dat
+  compute_stat init.dat "Initial"
+  rm init.dat
   grep Allocation tmp.dat > alloc.dat
   compute_stat alloc.dat "Allocation"
   rm alloc.dat
