@@ -35,6 +35,7 @@ run() {
   compute_stat read.dat "Reading"
   rm read.dat
   rm tmp.dat
+  echo
 }
 
 run read-floats-cstdio-malloc
