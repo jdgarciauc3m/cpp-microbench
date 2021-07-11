@@ -10,6 +10,9 @@ target_link_libraries(gen-floats-fmt-aligned-vector fmt::fmt)
 add_executable(gen-floats-fmt-vector gen-floats-fmt-vector.cpp)
 target_link_libraries(gen-floats-fmt-vector fmt::fmt)
 
+add_executable(gen-floats-stream-vector gen-floats-stream-vector.cpp)
+target_link_libraries(gen-floats-stream-vector fmt::fmt)
+
 add_executable(gen-floats-fmt-aligned-array gen-floats-fmt-aligned-array.cpp)
 target_link_libraries(gen-floats-fmt-aligned-array fmt::fmt)
 

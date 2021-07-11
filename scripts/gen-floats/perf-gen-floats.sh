@@ -47,3 +47,4 @@ run gen-floats-fmt-aligned-alloc-array $NITER
 run gen-floats-fmt-array $NITER
 run gen-floats-fmt-aligned-vector $NITER
 run gen-floats-fmt-vector $NITER
+run gen-floats-stream-vector $NITER
