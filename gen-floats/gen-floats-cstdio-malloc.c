@@ -67,7 +67,14 @@ int main(int argc, char ** argv) {
     exit(-1); // NOLINT
   }
 
+  // A small dis-alignment in heap
+  char * p = malloc(3);
+  p[0] = ' ';
+
   struct bench_result t = bench_cstdio(max_value);
   print_bench(&t);
+
+  free(p);
+
   return 0;
 }
