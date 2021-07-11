@@ -11,11 +11,15 @@ struct bench_result bench_cstdio(size_t n) {
   struct bench_result timing;
   timing.t1 = clock();
 
-  float * v = malloc(n * sizeof(float));
-  if (v == NULL) {
+  const unsigned long long pad = 256;
+  const unsigned long long line_size = 64;
+
+  float * buffer = malloc(n * sizeof(float) + pad);
+  if (buffer == NULL) {
     fprintf(stderr, "Cannot allocate memory [size=%lu]\n", n);
     exit(-1);// NOLINT
   }
+  float * v = (float *) (((unsigned long long) buffer + pad) & ~(line_size - 1));
 
   clock_t alloc_time = clock();
 
@@ -40,7 +44,7 @@ struct bench_result bench_cstdio(size_t n) {
     fprintf(file, "%.18f\n", v[i]);// NOLINT
   }
   fclose(file);
-  free(v);
+  free(buffer);
 
   timing.t3 = clock();
   return timing;
