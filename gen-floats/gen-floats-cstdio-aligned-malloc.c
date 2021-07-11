@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -58,8 +59,17 @@ void print_bench(const struct bench_result * t) {
   printf("Writing %lf us\n", d2);
 }
 
-int main() {
-  const int max_value = 100000;
+int main(int argc, char ** argv) {
+  if (argc != 2) {
+    fprintf(stderr, "Wrong arguments\n");
+    fprintf(stderr, "%s nelems\n", argv[0]);
+    exit(-1); // NOLINT
+  }
+  size_t max_value = strtoull(argv[1], NULL, 10);
+  if (errno == ERANGE) {
+    fprintf(stderr, "Cannot convert value %s to integer\n", argv[1]);
+    exit(-1); // NOLINT
+  }
   struct bench_result t = bench_cstdio(max_value);
   print_bench(&t);
   return 0;
