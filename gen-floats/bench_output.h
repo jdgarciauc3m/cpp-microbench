@@ -7,8 +7,6 @@
 #include <fmt/os.h>
 #include <fmt/ostream.h>
 
-static constexpr std::size_t max_elements = 100'000;
-
 void fmt_output_vector(const auto & v) {
   auto file_name = std::string(static_cast<const char *>(__func__)) + ".txt";
   auto file = fmt::output_file(file_name);
@@ -19,7 +17,7 @@ void fmt_output_vector(const auto & v) {
   }
 }
 
-auto bench_fmt_output_array(int n) {
+auto bench_fmt_output_array(std::size_t n) {
   using namespace std::chrono;
 
   auto t1 = high_resolution_clock::now();
@@ -31,7 +29,7 @@ auto bench_fmt_output_array(int n) {
   return std::tuple {__func__, t2 - t1, t3 - t2};
 }
 
-auto bench_fmt_output_vector(int n) {
+auto bench_fmt_output_vector(std::size_t n) {
   using namespace std::chrono;
 
   auto t1 = high_resolution_clock::now();
