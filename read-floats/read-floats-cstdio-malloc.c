@@ -57,7 +57,16 @@ void print_bench(const struct bench_result * t) {
 }
 
 int main() {
+  // A small dis-alignment in heap
+  char * p = malloc(3);
+  p[0] = ' ';
+
   struct bench_result t = bench_cstdio();
   print_bench(&t);
+
+  // Avoid allocation of p to be optimized out
+  printf("%c", p[0]);
+  free(p);
+
   return 0;
 }
