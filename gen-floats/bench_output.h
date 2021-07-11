@@ -44,11 +44,11 @@ auto generate_alloc_array(std::size_t max) {
   return v;
 }
 
-template <typename T>
+template <typename vector_type>
 auto generate_vector(std::size_t max) {
   using namespace std::chrono;
   auto t1 = high_resolution_clock::now();
-  aligned_vector<T> v;
+  vector_type v;
   v.reserve(max);
   auto t2 = high_resolution_clock::now();
   for (std::size_t i = 0; i < max; ++i) {
@@ -95,11 +95,12 @@ auto bench_fmt_output_alloc_array(std::size_t n) {
   return std::tuple {__func__, t2 - t1, t3 - t2};
 }
 
+template <typename vector_type>
 auto bench_fmt_output_vector(std::size_t n) {
   using namespace std::chrono;
 
   auto t1 = high_resolution_clock::now();
-  auto v = generate_vector<float>(n);
+  auto v = generate_vector<vector_type>(n);
   auto t2 = high_resolution_clock::now();
   fmt_output_vector(v);
   auto t3 = high_resolution_clock::now();

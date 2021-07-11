@@ -16,7 +16,7 @@ int main(int argc, char ** argv) {
 
   std::size_t max_elements = std::stoull(argv[1]); // NOLINT
 
-  auto r = bench_fmt_output_vector<aligned_vector<float>>(max_elements);
+  auto r = bench_fmt_output_vector<std::vector<float>>(max_elements);
   print_bench(r);
 
   // Avoid allocation of p to be optimized out

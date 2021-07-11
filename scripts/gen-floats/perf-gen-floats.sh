@@ -45,3 +45,4 @@ run gen-floats-cstdio-aligned-malloc $NITER
 run gen-floats-fmt-aligned-array $NITER
 run gen-floats-fmt-aligned-alloc-array $NITER
 run gen-floats-fmt-aligned-vector $NITER
+run gen-floats-fmt-vector $NITER
