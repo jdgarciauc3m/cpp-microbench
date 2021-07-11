@@ -14,26 +14,11 @@
 #include "util/alloc_array.hpp"
 #include "util/trivial_aligned_array.hpp"
 
-template <typename T>
-auto generate_trivial_array(std::size_t max) {
+template <typename array_type>
+auto generate_array(std::size_t max) {
   using namespace std::chrono;
   auto t1 = high_resolution_clock::now();
-  trivial_aligned_array<T> v(max);
-  auto t2 = high_resolution_clock::now();
-  for (std::size_t i = 0; i < max; ++i) {
-    v[i] = 1.0F / gsl::narrow_cast<float>(i+1);
-  }
-  auto t3 = high_resolution_clock::now();
-  fmt::print("Create: {}\n", duration_cast<microseconds>(t2-t1));
-  fmt::print("Fill: {}\n", duration_cast<microseconds>(t3-t2));
-  return v;
-}
-
-template <typename T>
-auto generate_alloc_array(std::size_t max) {
-  using namespace std::chrono;
-  auto t1 = high_resolution_clock::now();
-  alloc_array<T> v(max);
+  array_type v(max);
   auto t2 = high_resolution_clock::now();
   for (std::size_t i = 0; i < max; ++i) {
     v[i] = 1.0F / gsl::narrow_cast<float>(i+1);
@@ -60,7 +45,6 @@ auto generate_vector(std::size_t max) {
   return v;
 }
 
-
 void fmt_output_vector(const auto & v) {
   auto file_name = std::string(static_cast<const char *>(__func__)) + ".txt";
   auto file = fmt::output_file(file_name);
@@ -71,23 +55,12 @@ void fmt_output_vector(const auto & v) {
   }
 }
 
+template <typename array_type>
 auto bench_fmt_output_array(std::size_t n) {
   using namespace std::chrono;
 
   auto t1 = high_resolution_clock::now();
-  auto v = generate_trivial_array<float>(n);
-  auto t2 = high_resolution_clock::now();
-  fmt_output_vector(v);
-  auto t3 = high_resolution_clock::now();
-
-  return std::tuple {__func__, t2 - t1, t3 - t2};
-}
-
-auto bench_fmt_output_alloc_array(std::size_t n) {
-  using namespace std::chrono;
-
-  auto t1 = high_resolution_clock::now();
-  auto v = generate_alloc_array<float>(n);
+  auto v = generate_array<array_type>(n);
   auto t2 = high_resolution_clock::now();
   fmt_output_vector(v);
   auto t3 = high_resolution_clock::now();
@@ -107,7 +80,6 @@ auto bench_fmt_output_vector(std::size_t n) {
 
   return std::tuple {__func__, t2 - t1, t3 - t2};
 }
-
 
 void print_bench(auto t) {
   using namespace std::chrono;
