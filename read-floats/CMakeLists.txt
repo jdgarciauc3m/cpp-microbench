@@ -6,5 +6,6 @@ add_executable(read-floats-cstdio-malloc read-floats-cstdio-malloc.c)
 add_executable(read-floats-cstdio-aligned-malloc read-floats-cstdio-aligned-malloc.c)
 
 add_executable(read-floats-stream-aligned-array read-floats-stream-aligned-array.cpp)
+add_executable(read-floats-stream-array read-floats-stream-array.cpp)
 add_executable(read-floats-stream-aligned-vector read-floats-stream-aligned-vector.cpp)
 add_executable(read-floats-stream-vector read-floats-stream-vector.cpp)

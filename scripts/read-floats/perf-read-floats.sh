@@ -44,5 +44,6 @@ run() {
 run read-floats-cstdio-malloc
 run read-floats-cstdio-aligned-malloc
 run read-floats-stream-aligned-array
+run read-floats-stream-array
 run read-floats-stream-aligned-vector
 run read-floats-stream-vector
