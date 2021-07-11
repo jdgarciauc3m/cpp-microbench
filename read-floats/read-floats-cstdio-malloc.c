@@ -6,13 +6,25 @@ struct bench_result {
   clock_t t1, t2, t3;
 };
 
-struct bench_result bench_cstdio(size_t n) {
+struct bench_result bench_cstdio() {
 
   struct bench_result timing;
   timing.t1 = clock();
 
   const unsigned long long pad = 256;
   const unsigned long long line_size = 64;
+
+  FILE * file = fopen("bench_stdio.txt", "r");
+  if (file == NULL) {
+    fprintf(stderr, "Cannot open file %s for input\n", "bench_stdio.txt");
+    exit(-1); // NOLINT
+  }
+  size_t n = 0;
+  int res = fscanf(file, "%lu", &n); // NOLINT
+  if (res != 1) {
+    fprintf(stderr, "Cannot read count from file %s\n", "bench_stdio.txt");
+    exit(-1); // NOLINT
+  }
 
   float * buffer = malloc(n * sizeof(float) + pad);
   if (buffer == NULL) {
@@ -27,16 +39,6 @@ struct bench_result bench_cstdio(size_t n) {
   double d1 = 1000000.0 * (alloc_time - timing.t1) / CLOCKS_PER_SEC;// NOLINT
   printf("Create %lf us\n", d1);
 
-  FILE * file = fopen("bench_stdio.txt", "r");
-  if (file == NULL) {
-    fprintf(stderr, "Cannot open file %s for input\n", "bench_stdio.txt");
-    exit(-1); // NOLINT
-  }
-  int res = fscanf(file, "%lu", &n); // NOLINT
-  if (res != 1) {
-    fprintf(stderr, "Cannot read count from file %s\n", "bench_stdio.txt");
-    exit(-1); // NOLINT
-  }
   for (size_t i = 0; i < n; ++i) {
     res = fscanf(file, "%f", &v[i]);// NOLINT
     if (res != 1) {
@@ -60,8 +62,7 @@ void print_bench(const struct bench_result * t) {
 }
 
 int main() {
-  const int max_value = 100000;
-  struct bench_result t = bench_cstdio(max_value);
+  struct bench_result t = bench_cstdio();
   print_bench(&t);
   return 0;
 }
