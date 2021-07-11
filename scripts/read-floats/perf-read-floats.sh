@@ -28,6 +28,9 @@ run() {
     read-floats/$1
   done >tmp.dat
 
+  grep Allocation tmp.dat > alloc.dat
+  compute_stat alloc.dat "Allocation"
+  rm alloc.dat
   grep Reading tmp.dat > read.dat
   compute_stat read.dat "Reading"
   rm read.dat
@@ -35,5 +38,6 @@ run() {
 }
 
 run read-floats-cstdio-malloc
+run read-floats-cstdio-aligned-malloc
 run read-floats-stream-aligned-array
 run read-floats-stream-aligned-vector
